@@ -6,6 +6,8 @@
  * Time: 18:50
  */
 
+include_once "security.php";
+
 function get($filename){
     $arr=array();
     if (file_exists($filename) && is_readable ($filename)) {
@@ -36,23 +38,28 @@ function save($filename){
         fputs($fh,$str);
     }
     fclose($fh);
-    //todo вернуть файл
+}
+
+function delete($name){
+    return (int)unlink($name);
 }
 
 $dir='./storage/';
-$postType=$_POST['type'];
-$postName=$_POST['name'];
+$postType=test_input($_POST['type']);
+$postName=test_input($_POST['name']);
 
 //$postType='get';
 //$postName='q.txt';
-
 
 if ($postType=='get' and isset($postName)){
     echo get($dir.$postName);
     exit();
 }
 
-
+if ($postType=='delete' and isset($postName)){
+    echo delete($dir.$postName);
+    exit();
+}
 
 if ($postType=='save' and isset($postName)){
     save($dir.$postName);

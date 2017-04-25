@@ -48,10 +48,10 @@
 
     <table id="csvTable"  class="table table-bordered table-hover"></table>
 
-    <hr>
+   
 
-        <input type="button" onClick="sendForm()" class="none btn btn-primary" value="Выгрузить">
-        <input type="button" onClick="deleteForm()" class="none btn btn-danger" value="Стереть">
+        <input type="button" onClick="sendForm()" class="none lastBlock btn btn-primary" value="Выгрузить">
+        <input type="button" onClick="deleteForm()" class="none lastBlock btn btn-danger" value="Стереть">
 
 </div>
 <script>
@@ -61,6 +61,7 @@
 <script>
     var isUpload=false;
     var filename;
+    var locationHref="http://csv:81/download.php";
 
     $("#fileUploadForm").submit(function(){
         var formData = new FormData($(this)[0]);
@@ -165,13 +166,34 @@
 
     function sendForm() {
         var data={'type':'save','name':filename,'table':tableTOJson()};
-        console.log(tableTOJson());
+
         $.ajax({
             url: "edit.php",
             type: 'POST',
             data: data,
             success: function(responseData, textStatus, jqXHR) {
-                alert(responseData);
+                location.href=locationHref+"?name="+filename;
+
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                console.log(errorThrown);
+            }
+
+        });
+    }
+
+    function deleteForm() {
+        var data={'type':'delete','name':filename};
+
+        $.ajax({
+            url: "edit.php",
+            type: 'POST',
+            data: data,
+            success: function(responseData, textStatus, jqXHR) {
+                if (responseData==1){
+                    $('.lastBlock').addClass('none');
+                    $('#csvTable tr').remove();
+                }
 
             },
             error: function(jqXHR, textStatus, errorThrown) {
