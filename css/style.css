@@ -1,12 +1,27 @@
 .fleft{
     float:left;
 }
+
+.fright{
+    float:right;
+}
 .clear{
     clear:both;
 }
 .marginRight20{
     margin-right:20px;
 }
+.marginTop20{
+    margin-top:20px;
+}
+.block{
+    display: block;
+}
+
 .none{
     display: none;
+}
+
+#csvTable>tr>td>input{
+    margin: 5px 0 5px 0;
 }
