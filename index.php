@@ -26,7 +26,7 @@
     <script src="js/bootstrap.file-input.js"></script>
     <script src="js/cookie.js"></script>
     <script src="js/jquery-ui.min.js"></script>
-
+    <script src="js/draggable.js"></script>
 
     <link href="css/style.css" rel="stylesheet">
 </head>
@@ -38,7 +38,6 @@
 
     <div class="jumbotron">
         <p class="lead">Онлайн - редактор CSV файлов</p>
-
                 <input type="hidden" name="uploadFileName" id="uploadFileName">
 
                 <form id="fileUploadForm" name="fileUploadForm" action="save.php" method="POST" enctype="multipart/form-data">
@@ -71,10 +70,8 @@
 
     <table id="csvTable" cellspacing="0" cellpadding="2" class="table table-bordered table-hover"></table>
 
-   
-
-        <input type="button" onClick="sendForm()" class="none lastBlock btn btn-primary" value="Выгрузить">
-        <input type="button" onClick="deleteForm()" class="none lastBlock btn btn-danger" value="Стереть">
+    <input type="button" onClick="sendForm()" class="none lastBlock btn btn-primary" value="Выгрузить">
+    <input type="button" onClick="deleteForm()" class="none lastBlock btn btn-danger" value="Стереть">
 
 </div>
 <script>
@@ -104,7 +101,6 @@
 
             },
             success: function(responseData, textStatus, jqXHR) {
-//                console.log(responseData);
                 delimeter=$('#delimeter').val();
                 fromEncoding=$('#fromEncoding').val();
 
@@ -145,16 +141,16 @@
         }
         var str="",value="";
 
+        var counter=0;
         for(var i=0;i<rows;i++){
             str+="<tr>";
             for(var z=0;z<cols;z++){
                 value=obj[i].hasOwnProperty(z)?obj[i][z]:"";
-                str+="<td class='index'><input type='text' class='form-control input-md' value='"+value.toString()+"'></td>";
+                str+="<td class='index'><input id='inp"+counter.toString()+"' draggable='true' ondragstart='drag(event)' ondrop='drop(event)' ondragover='allowDrop(event)' type='text' class='form-control input-md' value='"+value.toString()+"'></td>";
+                counter++;
             }
             str+="</tr>";
         }
-//        console.log(str);
-
         $('#csvTable').html(str);
 
     }
@@ -226,12 +222,16 @@
             success: function(responseData, textStatus, jqXHR) {
                 console.log(responseData);
                 if (responseData==2){//2 означает что удалено оба файла
-                    $('.lastBlock').addClass('none');
-                    $('#csvTable tr').remove();
-                    deleteCookie('csvFileName');
-                    deleteCookie('csvEncoding');
-                    deleteCookie('csvDelimeter');
+                    alert("Файлы успешно удалены");
+
+                }else{
+                    alert(responseData);
                 }
+                $('.lastBlock').addClass('none');
+                $('#csvTable tr').remove();
+                deleteCookie('csvFileName');
+                deleteCookie('csvEncoding');
+                deleteCookie('csvDelimeter');
 
             },
             error: function(jqXHR, textStatus, errorThrown) {
@@ -251,11 +251,6 @@
 
     });
 
-    // drag and drop begin
-
-
-
-    // drag and drop end
 </script>
 </body>
 </html>

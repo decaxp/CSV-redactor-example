@@ -40,8 +40,8 @@ function save($filename,$json,$del,$enc,$newfile){
         $output.=$str;
     }
 
-//    $outputConverted=iconv('utf-8',$enc,$output);
-    $outputConverted=mb_convert_encoding($output,$enc,"UTF-8");
+//    $outputConverted=mb_convert_encoding($output,$enc,"UTF-8");
+    $outputConverted=iconv("UTF-8",$enc,$output);
     fwrite($fh,$outputConverted);
     fclose($fh);
 
